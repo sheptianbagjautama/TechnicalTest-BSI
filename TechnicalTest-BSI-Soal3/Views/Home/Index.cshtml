@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjualan Terbanyak</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Input Data Transaksi</h1>
+    <table id="transactionTable" class="table is-striped">
+        <thead class="text">
+            <tr>
+                <th>Customer ID</th>
+                <th>Transaction Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" class="customerId" /></td>
+                <td><input type="date" class="transactionDate" /></td>
+                <td><button class="removeRow">Hapus</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="addRow">Tambah Baris</button>
+    <button id="submit">Simpan Data</button>
+    <button id="getTopSales">Lihat Penjualan Terbanyak</button>
+
+    <h2>Hasil</h2>
+    <div id="result"></div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Tambah baris baru
+            $("#addRow").click(function () {
+                $("#transactionTable tbody").append(`
+                            <tr>
+                                <td><input type="text" class="customerId" /></td>
+                                <td><input type="date" class="transactionDate" /></td>
+                                <td><button class="removeRow">Hapus</button></td>
+                            </tr>
+                        `);
+            });
+
+            // Hapus baris
+            $(document).on("click", ".removeRow", function () {
+                $(this).closest("tr").remove();
+            });
+
+            // Simpan data transaksi
+            $("#submit").click(function () {
+                const transactions = [];
+                $("#transactionTable tbody tr").each(function () {
+                    const customerId = $(this).find(".customerId").val();
+                    const transactionDate = $(this).find(".transactionDate").val();
+
+                    if (customerId && transactionDate) {
+                        transactions.push({
+                            Customer_ID: customerId,
+                            Transaction_Date: transactionDate
+                        });
+                    }
+                });
+
+                $.ajax({
+                    url: "/api/Transaction/AddTransactions",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(transactions),
+                    success: function () {
+                        alert("Data berhasil disimpan!");
+                    },
+                    error: function () {
+                        alert("Terjadi kesalahan saat menyimpan data.");
+                    }
+                });
+            });
+
+            // Tampilkan penjualan terbanyak
+            $("#getTopSales").click(function () {
+                $.ajax({
+                    url: "/api/Transaction/GetTopSales",
+                    type: "GET",
+                    success: function (response) {
+                        console.log(response);
+                        let resultHtml = "<table border='1'><tr><th>Customer ID</th><th>Total Penjualan</th></tr>";
+                        response.forEach(item => {
+                            resultHtml += `<tr><td>${item.customer_ID}</td><td>${item.total_Penjualan}</td></tr>`;
+                        });
+                        resultHtml += "</table>";
+                        $("#result").html(resultHtml);
+                    },
+                    error: function () {
+                        alert("Terjadi kesalahan saat mengambil data.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
