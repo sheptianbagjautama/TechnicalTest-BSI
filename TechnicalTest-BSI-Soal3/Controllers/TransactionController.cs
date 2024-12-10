@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TechnicalTest_BSI_Soal3.Data;
+using TechnicalTest_BSI_Soal3.DTO;
 using TechnicalTest_BSI_Soal3.Models;
+using TechnicalTest_BSI_Soal3.Services.Interfaces;
 
 namespace TechnicalTest_BSI_Soal3.Controllers
 {
@@ -8,37 +11,27 @@ namespace TechnicalTest_BSI_Soal3.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ITransactionService _service;
 
-        public TransactionController(AppDbContext context)
+        public TransactionController(ITransactionService service)
         {
-            _context = context;
+            _service = service;
         }
 
         [HttpPost("AddTransactions")]
         public IActionResult AddTransactions([FromBody] List<Transaction> transactions)
         {
-            if (transactions == null || !transactions.Any())
-                return BadRequest("Data transaksi tidak valid.");
+            if (transactions == null || transactions.Count == 0)
+                return BadRequest("Data transaksi kosong.");
 
-            _context.Transactions.AddRange(transactions);
-            _context.SaveChanges();
+            _service.AddTransactions(transactions);
             return Ok("Data berhasil disimpan.");
         }
 
         [HttpGet("GetTopSales")]
         public IActionResult GetTopSales()
         {
-            var result = _context.Transactions
-                .GroupBy(t => t.Customer_ID)
-                .Select(group => new
-                {
-                    Customer_ID = group.Key,
-                    Total_Penjualan = group.Count()
-                })
-                .OrderByDescending(x => x.Total_Penjualan)
-                .ToList();
-
+            var result = _service.GetTopSales();
             return Ok(result);
         }
     }

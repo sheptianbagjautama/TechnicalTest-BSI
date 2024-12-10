@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TechnicalTest_BSI_Soal3.DTO;
 using TechnicalTest_BSI_Soal3.Models;
 
 namespace TechnicalTest_BSI_Soal3.Data
