@@ -27,8 +27,8 @@
 ![Service Soal 3](https://github.com/user-attachments/assets/c488d2f7-f7cb-4ad3-a9e8-423158288b39)
 
 #### Repository
-![Repository Soal 3](https://github.com/user-attachments/assets/4ce74120-6a50-4b2e-b7ed-16a59eeac0fc)
+![Repository Soal 3](https://github.com/user-attachments/assets/860aa702-4db4-4d41-b104-51409375531f)
 
 
 ### Screenshoot Running Program
-![Ouput Soal 3](https://github.com/user-attachments/assets/7f81c7b4-2cee-43e9-bddb-235ee8d4db9c)
+![Ouput Soal 3](https://github.com/user-attachments/assets/9ce5cf2d-b648-4cf5-9398-87003735c4dc)
