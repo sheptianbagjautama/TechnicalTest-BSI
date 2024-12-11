@@ -18,22 +18,21 @@ namespace TechnicalTest_BSI_Soal3.Repositories.TransactionRepository
         public List<CustomerSalesDto> GetTopSales()
         {
             return _context.Transactions
-                .FromSqlRaw(@"
-                    SELECT 
-                        TOP 100 PERCENT 
-                        Customer_ID, 
-                        COUNT(*) AS Total_Penjualan
-                    FROM Transactions
-                    GROUP BY Customer_ID
-                    ORDER BY Total_Penjualan DESC
-                ")
-                .Select(x => new CustomerSalesDto
-                {
-                    Customer_ID = x.Customer_ID,
-                    Total_Penjualan = _context.Transactions
-                    .Count(t => t.Customer_ID == x.Customer_ID)
-                })
-                .ToList();
+                    .FromSqlRaw(@"
+                        SELECT 
+                            Customer_ID, 
+                            COUNT(*) AS Total_Penjualan
+                        FROM Transactions
+                        GROUP BY Customer_ID
+                        ORDER BY Total_Penjualan DESC, Customer_ID ASC OFFSET 0 ROWS
+
+                    ")
+                    .Select(x => new CustomerSalesDto
+                    {
+                        Customer_ID = x.Customer_ID,
+                        Total_Penjualan = _context.Transactions.Count(t => t.Customer_ID == x.Customer_ID)
+                    })
+                    .ToList();
         }
 
         public void AddTransactions(List<Transaction> transactions)

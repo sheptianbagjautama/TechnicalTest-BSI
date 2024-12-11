@@ -28,7 +28,6 @@
             }
         }
 
-        // Cetak karakter terakhir
         Console.WriteLine($"{currentChar} = {count}");
     }
 }
