@@ -17,7 +17,7 @@
 
 ![Output Soal 2](https://github.com/user-attachments/assets/9e8803cf-2b78-4eca-af5d-9452f2e83339)
 
-## Soal 1
+## Soal 3
 
 ### Screnshoot Code
 #### Controller
